@@ -7,5 +7,6 @@ import com.example.medicalcheckup.models.MCU;
 
 @Repository
 public interface MCURepository extends JpaRepository<MCU, Integer>  {
-    MCU findByName(String name);
+    MCU findByNama(String nama);
+    MCU findByCategory(String category);
 }
