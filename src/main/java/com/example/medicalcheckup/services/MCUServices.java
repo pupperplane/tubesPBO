@@ -1,11 +1,12 @@
 package com.example.medicalcheckup.services;
 
-import com.example.medicalcheckup.models.MCU;
-import com.example.medicalcheckup.repositories.MCURepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.medicalcheckup.models.MCU;
+import com.example.medicalcheckup.repositories.MCURepository;
 
 @Service
 public class MCUServices {
@@ -24,7 +25,7 @@ public class MCUServices {
         MCU existingMCU = repository.findById(id).orElse(null);
         if (existingMCU != null) {
             existingMCU.setNama(updatedMCU.getNama());
-            existingMCU.setKategori(updatedMCU.getKategori());
+            existingMCU.setCategory(updatedMCU.getCategory());
             existingMCU.setDetail(updatedMCU.getDetail());
             repository.save(existingMCU);
         }
