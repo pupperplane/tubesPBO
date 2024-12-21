@@ -22,10 +22,13 @@ public class MCU {
     @Column(name = "nama", unique = true, nullable = false)
     private String nama;
 
-    @Column(name = "Category", nullable = false)
+    @Column(name = "category", nullable = false)
     private String category;
 
     @Column(name = "detail", nullable = false, length = 255)
     private String detail;
+
+    @Column(name = "harga", nullable = false, length = 255)
+    private float harga;
 
 }

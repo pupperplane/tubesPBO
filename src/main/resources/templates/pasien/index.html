@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Tes Laboratorium</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Set primary background to white */
+        body {
+            background-color: #ffffff;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #007bff; /* Biru untuk navbar */
+        }
+        .navbar a {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Card style */
+        .test-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #ffffff; /* White background for cards */
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        /* Animation for card fade in and move up */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Title style */
+        .test-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #007bff; /* Secondary color (Blue) for title */
+            transition: transform 0.3s ease;
+        }
+
+        /* Hover effect for title */
+        .test-title:hover {
+            transform: translateX(5px);
+        }
+
+        /* Description style */
+        .test-description {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Price style */
+        .test-price {
+            color: #007bff; /* Secondary color (Blue) for price */
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* Button style */
+        .btn-order {
+            background-color: #007bff; /* Secondary color (Blue) for button */
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            display: block;
+            margin-top: 15px;
+            width: 100%;
+            opacity: 0;
+            animation: fadeInButton 1s 0.5s forwards;
+        }
+
+        /* Animation for button fade in */
+        @keyframes fadeInButton {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Button hover effect */
+        .btn-order:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Row gap */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/header::nav-lp"></div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4" style="color: #007bff;">Daftar Tes Laboratorium</h2>
+        <div class="row">
+            <!-- Test 1 -->
+            <div class="col-md-4" th:each="mcu : ${mcu}">
+                <div class="card test-card">
+                    <div class="test-card-body">
+                        <h5 class="test-title" th:text="${mcu.getNama()}"></h5>
+                        <p class="test-description" th:text="${mcu.getDetail()}"></p>
+                        <p class="test-price" th:text="'Rp' + ${mcu.getHarga()}"></p>
+                        <a href="#" class="btn-order">Tambah Ke Keranjang</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

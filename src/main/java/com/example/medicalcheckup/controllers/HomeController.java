@@ -29,17 +29,13 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model) {
-        // Ambil Authentication dari SecurityContext untuk mendapatkan username
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();  // Username yang digunakan untuk login
-        
-        // Ambil User dari database berdasarkan username
+    
         User user = UserRepository.findByUsername(username);  // Cari user berdasarkan username
         
-        // Jika user ditemukan, kirimkan nama ke view
         model.addAttribute("nama", user);  // Kirim nama ke view
         
-        
-        return "home";  // Kembali ke halaman home
+        return "home";  
     }
 }
