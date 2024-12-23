@@ -27,10 +27,20 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(encodedPassword);
         user.setNama(name);
-        user.setNama(phone);
+        user.setPhone(phone);
         user.setAuthorities("USER"); 
 
         userRepository.save(user);
         return true;
+    }
+
+    public User getUserById(String name) {
+        User user = userRepository.findByUsername(name);
+        return user;
+    }
+
+    public int getUserIdByUsername(String name) {
+        User user = userRepository.findByUsername(name);
+        return user.getId();
     }
 }

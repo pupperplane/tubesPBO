@@ -114,27 +114,52 @@
 <body>
     <div th:replace="fragments/header::nav-lp"></div>
     <div class="container mt-5">
-        <h2 class="text-center mb-4" style="color: #007bff;">Daftar Tes Laboratorium</h2>
+        <h2 class="text-center mb-4" style="color: #007bff;">Daftar Keranjang</h2>
         <div class="row">
-            <!-- Test 1 -->
             <div class="col-md-4" th:each="mcu : ${mcu}">
                 <div class="card test-card">
                     <div class="test-card-body">
                         <h5 class="test-title" th:text="${mcu.getNama()}"></h5>
                         <p class="test-description" th:text="${mcu.getDetail()}"></p>
                         <p class="test-price" th:text="'Rp' + ${mcu.getHarga()}"></p>
-                        <form th:action="@{/home/{id}(id=${mcu.id})}" method="POST">
-                            <button  class="btn-order">Tambah Ke Keranjang</button>
+                        <form th:action="@{/home/cart/{id}(id=${mcu.id})}" th:method="delete">
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button  class="btn-order">Hapus Item</button>
                         </form>
                     </div>
                 </div>
             </div>
-            
+            <div class="container mt-5">
+            <form th:action="@{/home/cart}" method="get">
+                  <div class="form-group">
+                    <label for="dateInput">Tanggal Pemeriksaan:</label>
+                    <input type="date" class="form-control" id="dateInput" name="date" required>
+                  </div>        
+                </div>
+                <div class="form-group">
+                    <label for="region">Pilih Daerah:</label>
+                    <select class="form-control" id="region" name="region" onchange="this.form.submit()">
+                        <option value="" th:selected="${region == null}">Pilih Daerah</option>
+                        <option value="Jakarta" th:selected="${region == 'Jakarta'}">Jakarta</option>
+                        <option value="Surabaya" th:selected="${region == 'Surabaya'}">Surabaya</option>
+                        <option value="Bandung" th:selected="${region == 'Bandung'}">Bandung</option>
+                        <option value="Bengkulu" th:selected="${region == 'Bengkulu'}">Bengkulu</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hospital">Pilih Rumah Sakit:</label>
+                    <select class="form-control" id="hospital" name="hospital">
+                        <option value="">Pilih Rumah Sakit</option>
+                        <option th:each="hospital : ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}">
+                            Rumah Sakit
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+        </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    
 </body>
 </html>
