@@ -1,5 +1,6 @@
 package com.example.medicalcheckup.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.medicalcheckup.models.Cart;
+import com.example.medicalcheckup.models.Cart.Status;
 import com.example.medicalcheckup.models.Hospital;
 import com.example.medicalcheckup.models.MCU;
 import com.example.medicalcheckup.repositories.HospitalRepository;
@@ -59,11 +61,20 @@ public class PasienController {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserIdByUsername(name);
         Cart cart = cartService.getKeranjangByUserid(id);
+        if(cart == null){
+            cart = new Cart();
+            cart.setUser(userService.getUserById(name));
+            cart.setStatus(Status.PENDING);
+            cartService.saveKeranjang(cart);
+        }
         int a = cart.getId();
+        double total = cartItemService.getTotalHargaByCartId(a);
         List<MCU> mcu = cartItemService.getMCUByCartId(a);
         model.addAttribute("mcu", mcu);
+        model.addAttribute("cartId", cart.getId());
         model.addAttribute("region", region);
         model.addAttribute("hospitals", hospitals);
+        model.addAttribute("totalHarga", total);
         return "pasien/test"; 
     }
 
@@ -84,6 +95,38 @@ public class PasienController {
         Cart cart = cartService.getKeranjangByUserid(userId);
         cartItemService.removeItemFromCart(cart,id);
         return "redirect:/home/cart"; 
+    }
+    
+
+    @PostMapping("/home/cart/{id}")
+    public String checkout(@PathVariable int id,
+                            @RequestParam String region, 
+                            @RequestParam String hospital,
+                            @RequestParam LocalDate date) {
+        Cart cart = cartService.getKeranjangById(id);
+        cart.setDaerah(region);
+        cart.setRumah_sakit(hospital);
+        cart.setTanggal_periksa(date);
+        cart.setTotal_harga(cartItemService.getTotalHargaByCartId(id));
+        cart.setStatus(Status.COMPLETED);
+        cartService.saveKeranjang(cart);
+        
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        cart = new Cart();
+        cart.setUser(userService.getUserById(name));
+        cart.setStatus(Status.PENDING);
+        cartService.saveKeranjang(cart);
+   
+        return "redirect:/home"; 
+    }
+
+    @GetMapping("/home/history")
+    public String viewHistory(Model model) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserIdByUsername(name);
+        List<Cart> cartHistory = cartService.getKeranjangByUseridlist(id);
+        model.addAttribute("cartHistory", cartHistory);
+        return "pasien/history";
     }
 
 }
