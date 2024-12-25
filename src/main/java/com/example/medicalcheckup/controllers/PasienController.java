@@ -129,4 +129,13 @@ public class PasienController {
         return "pasien/history";
     }
 
+    @GetMapping("/home/cart/{idC}")
+    public String viewDetail(Model model, @PathVariable int idC) {
+        Cart cart = cartService.getKeranjangById(idC);
+        List <MCU> mcu =  cartItemService.getMCUByCartId(idC);
+        model.addAttribute("mcu", mcu);
+        model.addAttribute("cart", cart);
+        return "pasien/detail";
+    }
+
 }
