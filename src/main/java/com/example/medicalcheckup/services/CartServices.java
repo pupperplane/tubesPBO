@@ -35,9 +35,16 @@ public class CartServices {
         return cart;
     }
 
+    public List<Cart> getKeranjangByUseridlist(int id){
+        List <Cart> cart = keranjangRepository.findAllByUserIdAndStatus(id, Status.COMPLETED);
+        return cart;
+    }
+
     public void deleteKeranjang(int id) {
         keranjangRepository.deleteById(id);
     }
+
+    
 
     
 }

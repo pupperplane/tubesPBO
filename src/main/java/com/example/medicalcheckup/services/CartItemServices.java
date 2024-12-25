@@ -48,4 +48,13 @@ public class CartItemServices {
                         .map(Cart_Item::getMcu)
                         .collect(Collectors.toList());
     }
+
+    public Double getTotalHargaByCartId(int cartId) {
+        List<Cart_Item> cartItems = itemKeranjangRepository.findByCartId(cartId);
+        double totalHarga = cartItems.stream()
+                                      .mapToDouble(item -> item.getMcu().getHarga()) 
+                                      .sum();
+        return totalHarga;
+    }
+    
 }

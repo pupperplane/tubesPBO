@@ -24,7 +24,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @Column(name = "tanggal_periksa", nullable = false)
+    @Column(name = "tanggal_periksa", nullable = true)
     private LocalDate tanggal_periksa;
 
     @ManyToOne
@@ -39,4 +39,13 @@ public class Cart {
         PENDING,
         COMPLETED,
     }
+
+    @Column(name = "daerah", nullable = true)
+    private String daerah;
+
+    @Column(name = "rumah_sakit", nullable = true)
+    private String rumah_sakit;
+
+    @Column(name = "total_harga", nullable = false)
+    private Double total_harga = 0.0;
 }
