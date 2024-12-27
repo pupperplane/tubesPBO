@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.medicalcheckup.models.MCU;
@@ -20,6 +19,12 @@ import com.example.medicalcheckup.services.MCUServices;
 public class AdminController {
     @Autowired
     private MCUServices mcuServices;
+
+
+    @GetMapping("/admin")
+    public String landingPage() {
+        return "admin/homeAdmin"; // Halaman landing
+    }
 
     //ngambil semua paket
     @GetMapping("/admin/mcu")
@@ -40,23 +45,40 @@ public class AdminController {
 
     //nambah paket
     @PostMapping("/admin/mcu/add")
-    public ResponseEntity<String> addMCUPackage(@RequestBody MCU mcu) {
+    public String addMCUPackage( @RequestParam String nama, 
+                                @RequestParam String kategori, 
+                                @RequestParam String detail, 
+                                @RequestParam int harga) {
+        MCU mcu = new MCU();
+        mcu.setNama(nama);
+        mcu.setCategory(kategori);
+        mcu.setDetail(detail);
+        mcu.setHarga(harga);
         mcuServices.saveMCUPackage(mcu);
-        return ResponseEntity.ok("MCU package added successfully.");
+        return "redirect:/admin";
     }
 
     //update paket
     @PutMapping("/admin/mcu/update/{id}")
-    public ResponseEntity<String> updateMCUPackage(@PathVariable int id, @RequestBody MCU updatedMCU) {
-        mcuServices.updateMCUPackage(id, updatedMCU);
-        return ResponseEntity.ok("MCU package updated successfully.");
+    public String updateMCUPackage(@PathVariable int id,
+                                                    @RequestParam String nama, 
+                                                    @RequestParam String kategori, 
+                                                    @RequestParam String detail, 
+                                                    @RequestParam int harga) {
+        MCU mcu = new MCU();
+        mcu.setNama(nama);
+        mcu.setCategory(kategori);
+        mcu.setDetail(detail);
+        mcu.setHarga(harga);
+        mcuServices.updateMCUPackage(id, mcu);
+        return "redirect:/admin";
     }
 
     //delete paket
     @DeleteMapping("/admin/mcu/delete/{id}")
-    public ResponseEntity<String> deleteMCUPackage(@PathVariable int id) {
+    public String deleteMCUPackage(@PathVariable int id) {
         mcuServices.deleteMCUPackage(id);
-        return ResponseEntity.ok("MCU package deleted successfully.");
+        return "redirect:/admin";
     }
 
     //nyari user
