@@ -23,6 +23,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/admin/mcu/update/**", "/admin/mcu/delete/**"))
                 .formLogin(httpForm -> {
                     httpForm
                         .loginPage("/login").permitAll()
