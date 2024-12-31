@@ -1,7 +1,9 @@
 package com.example.medicalcheckup.controllers;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ import com.example.medicalcheckup.repositories.HospitalRepository;
 import com.example.medicalcheckup.repositories.MCURepository;
 import com.example.medicalcheckup.services.CartItemServices;
 import com.example.medicalcheckup.services.CartServices;
+import com.example.medicalcheckup.services.MCUServices;
 import com.example.medicalcheckup.services.UserService;
 
 import jakarta.transaction.Transactional;
@@ -32,6 +35,9 @@ public class PasienController {
 
     @Autowired
     private UserService userService; 
+
+    @Autowired
+    private MCUServices mcuService; 
 
     @Autowired
     private CartServices cartService; 
@@ -49,6 +55,8 @@ public class PasienController {
         if (mcuList.isEmpty()) {
             model.addAttribute("errorMessage", "Tidak ada data untuk kategori " + cName);
         } else {
+            List<String> formattedHargaList = mcuService.formatMCUHarga(mcuList);
+            model.addAttribute("formattedHargaList", formattedHargaList);
             model.addAttribute("mcu", mcuList);
         }
 
@@ -69,12 +77,14 @@ public class PasienController {
         }
         int a = cart.getId();
         double total = cartItemService.getTotalHargaByCartId(a);
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        String totalHarga = formatRupiah.format(total);
         List<MCU> mcu = cartItemService.getMCUByCartId(a);
         model.addAttribute("mcu", mcu);
         model.addAttribute("cartId", cart.getId());
         model.addAttribute("region", region);
         model.addAttribute("hospitals", hospitals);
-        model.addAttribute("totalHarga", total);
+        model.addAttribute("totalHarga", totalHarga);
         return "pasien/test"; 
     }
 
@@ -108,6 +118,8 @@ public class PasienController {
         cart.setRumah_sakit(hospital);
         cart.setTanggal_periksa(date);
         cart.setTotal_harga(cartItemService.getTotalHargaByCartId(id));
+        LocalDate currentDate = LocalDate.now();   
+        cart.setTanggal_CO(currentDate);
         cart.setStatus(Status.COMPLETED);
         cartService.saveKeranjang(cart);
         

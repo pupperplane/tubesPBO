@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.example.medicalcheckup.services.MyUserDetailsService;
 
@@ -23,24 +24,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/admin/mcu/update/**", "/admin/mcu/delete/**"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/admin/mcu/update/**", "/admin/mcu/delete/**", "admin/reports/**"))
                 .formLogin(httpForm -> {
                     httpForm
                         .loginPage("/login").permitAll()
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler(customSuccessHandler())
                         .failureUrl("/login?error=true");
                 })
                 .logout(logout -> {
                     logout
-                        .logoutUrl("/logout")             // URL untuk logout
-                        .logoutSuccessUrl("/")            // Redirect setelah logout
-                        .invalidateHttpSession(true)      // Invalidate session saat logout
-                        .clearAuthentication(true);       // Clear authentication
+                        .logoutUrl("/logout")             
+                        .logoutSuccessUrl("/")           
+                        .invalidateHttpSession(true)      
+                        .clearAuthentication(true);       
                 })
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/login", "/req/register", "/").permitAll();
-                    registry.anyRequest().authenticated();  // Semua request lainnya harus terautentikasi
+                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
+                    registry.anyRequest().authenticated(); 
                 })
                 .userDetailsService(customUserDetailsService) // Menyediakan custom userDetailsService
                 .build();
@@ -48,7 +50,12 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Menggunakan BCryptPasswordEncoder untuk enkripsi password
+        return new BCryptPasswordEncoder();  
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
     }
 
 }

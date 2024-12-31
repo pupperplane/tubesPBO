@@ -117,12 +117,12 @@
         <h2 class="text-center mb-4" style="color: #007bff;">Daftar Tes Laboratorium</h2>
         <div class="row">
             <!-- Test 1 -->
-            <div class="col-md-4" th:each="mcu : ${mcu}">
+            <div class="col-md-4" th:each="mcu,  iterStat  : ${mcu}">
                 <div class="card test-card">
                     <div class="test-card-body">
                         <h5 class="test-title" th:text="${mcu.getNama()}"></h5>
                         <p class="test-description" th:text="${mcu.getDetail()}"></p>
-                        <p class="test-price" th:text="'Rp' + ${mcu.getHarga()}"></p>
+                        <p class="test-price" th:text="${formattedHargaList[iterStat.index]}"></p>
                         <form th:action="@{/home/{id}(id=${mcu.id})}" method="POST">
                             <button  class="btn-order">Tambah Ke Keranjang</button>
                         </form>
