@@ -70,8 +70,8 @@
                 <div class="d-flex align-items-center mb-3 justify-content-between">
                     <h2 class="me-3 mb-0">Pasien</h2>
                     <input type="text" class="form-control w-auto" id="daterangePasien" name="daterangePasien" value="2024/01/20 - 2024/01/29" />
-
                 </div>
+                    <input type="text" class="form-control w-25 mb-2" id="search" name="search" placeholder="Cari Berdasarkan Nama atau MCU" onchange="filterDataPasienNama(this.value)"/>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead class="table-dark">
@@ -204,7 +204,7 @@
 
             const pasienTableBody = document.getElementById("pasienTableBody");
 
-
+            getUser();
 
             getMCU();
             $('input[name="daterange"]').daterangepicker({
@@ -215,6 +215,7 @@
             }, function(start, end, label) {
                 filterDataLaporan(start, end);
             });
+
             $('input[name="daterangePasien"]').daterangepicker({
                 opens: 'left',
                 locale: {
@@ -298,6 +299,72 @@
                     `).join('');
                 })
         };
+
+        function filterDataPasienNama(a){
+            fetch('/admin/users')
+            .then(res => res.json())
+                .then(data => {
+                    let filteredData = data.filter(user => {
+                       return user.nama.toLowerCase().includes(a.toLowerCase());
+                    });
+
+                    if(filteredData.length === 0){
+                        filteredData = data.filter(user => {
+                        return user.cart.some(cart => 
+                            cart.cart_Item.some(b => {
+                                return b.mcu.nama.toLowerCase().includes(a.toLowerCase())
+                            })
+                        );
+                    });
+                    }
+                    console.log(filteredData)
+                    
+                    const pasienTableBody = document.querySelector('#pasienTableBody'); // Pastikan ini sudah ada di HTML
+                    pasienTableBody.innerHTML = filteredData.map(user => `
+                        <tr>
+                            <td>${user.nama}</td>
+                            <td>${user.phone}</td>
+                            <td>
+                                ${[...new Set(user.cart.filter(a => a.status === 'COMPLETED') 
+                                    .map(a => 
+                                        a.cart_Item.map(b => b.mcu.nama) 
+                                    ).flat())]  
+                                    .join(', ')}
+                            </td>
+                            <td>
+                                <a href="/admin/reports/">
+                                    <button class="btn btn-primary btn-sm">Detail</button>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+        }
+        function getUser(){
+            fetch('/admin/users')
+            .then(res => res.json())
+                .then(data => {
+                    const pasienTableBody = document.querySelector('#pasienTableBody'); 
+                    pasienTableBody.innerHTML = data.map(user => `
+                        <tr>
+                            <td>${user.nama}</td>
+                            <td>${user.phone}</td>
+                            <td>
+                                ${[...new Set(user.cart.filter(a => a.status === 'COMPLETED') 
+                                    .map(a => 
+                                        a.cart_Item.map(b => b.mcu.nama) 
+                                    ).flat())]  
+                                    .join(', ')}
+                            </td>
+                            <td>
+                                <a href="/admin/reports/">
+                                    <button class="btn btn-primary btn-sm">Detail</button>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+            })
+        }
 
 
     </script>

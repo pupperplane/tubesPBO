@@ -123,7 +123,7 @@ public class AdminController {
 
     @GetMapping("/admin/users")
     public ResponseEntity<List<User>> User() {
-        List <User> user = userRepository.findAllByAuthorities("ADMIN");
+        List <User> user = userRepository.findAllByAuthorities("USER");
 
         return ResponseEntity.ok(user);
     }
