@@ -124,6 +124,7 @@ public class AdminController {
     @GetMapping("/admin/users")
     public ResponseEntity<List<User>> User() {
         List <User> user = userRepository.findAllByAuthorities("ADMIN");
+
         return ResponseEntity.ok(user);
     }
     

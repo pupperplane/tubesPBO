@@ -42,6 +42,7 @@
                     </div>
                 </section>
 
+
             <section id="reports" class="mt-5">
                 <div class="d-flex align-items-center mb-3 justify-content-between">
                     <h2 class="me-3 mb-0">Laporan Checkout</h2>
@@ -69,6 +70,7 @@
                 <div class="d-flex align-items-center mb-3 justify-content-between">
                     <h2 class="me-3 mb-0">Pasien</h2>
                     <input type="text" class="form-control w-auto" id="daterangePasien" name="daterangePasien" value="2024/01/20 - 2024/01/29" />
+
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
@@ -81,6 +83,7 @@
                             </tr>
                         </thead>
                         <tbody id="pasienTableBody">
+
                             <!-- Data dynamically loaded -->
                         </tbody>
                     </table>
@@ -198,7 +201,10 @@
 
         $(function() {
             const reportsTableBody = document.getElementById("reportsTableBody");
+
             const pasienTableBody = document.getElementById("pasienTableBody");
+
+
 
             getMCU();
             $('input[name="daterange"]').daterangepicker({
@@ -224,6 +230,7 @@
         });
 
         function filterDataLaporan(start, end){
+
         
             const startDate = start.toDate();
             const endDate = end.toDate();
@@ -251,7 +258,6 @@
                             </td>
                         </tr>
                     `).join('');
-                    
                 })
          };
 
@@ -292,6 +298,8 @@
                     `).join('');
                 })
         };
+
+
     </script>
     
 </body>
