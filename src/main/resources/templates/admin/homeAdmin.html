@@ -42,8 +42,7 @@
                     </div>
                 </section>
 
-                <!-- Laporan -->
-                <!-- Laporan -->
+
             <section id="reports" class="mt-5">
                 <div class="d-flex align-items-center mb-3 justify-content-between">
                     <h2 class="me-3 mb-0">Laporan Checkout</h2>
@@ -61,6 +60,30 @@
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">
+                            <!-- Data dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="reports" class="mt-5">
+                <div class="d-flex align-items-center mb-3 justify-content-between">
+                    <h2 class="me-3 mb-0">Pasien</h2>
+                    <input type="text" class="form-control w-auto" id="daterangePasien" name="daterangePasien" value="2024/01/20 - 2024/01/29" />
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nama Pasien</th>
+                                <th>Nomor Telepon</th>
+                                <th style="width:50%">Mcu yg Dipilih</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pasienTableBody">
+
                             <!-- Data dynamically loaded -->
                         </tbody>
                     </table>
@@ -179,6 +202,10 @@
         $(function() {
             const reportsTableBody = document.getElementById("reportsTableBody");
 
+            const pasienTableBody = document.getElementById("pasienTableBody");
+
+
+
             getMCU();
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left',
@@ -186,14 +213,24 @@
                     format: 'YYYY-MM-DD'
                 }
             }, function(start, end, label) {
-                filterData(start, end);
+                filterDataLaporan(start, end);
+            });
+            $('input[name="daterangePasien"]').daterangepicker({
+                opens: 'left',
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            }, function(start, end, label) {
+                filterDataPasien(start, end);
             });
             const initialStart = moment().startOf('year');
             const initialEnd = moment().endOf('year');
-            filterData(initialStart, initialEnd);
+            filterDataLaporan(initialStart, initialEnd);
+            filterDataPasien(initialStart, initialEnd);
         });
 
-        function filterData(start, end){
+        function filterDataLaporan(start, end){
+
         
             const startDate = start.toDate();
             const endDate = end.toDate();
@@ -223,6 +260,46 @@
                     `).join('');
                 })
          };
+
+         function filterDataPasien(start, end){
+            const startDate = start.toDate();
+            const endDate = end.toDate();
+
+            fetch('/admin/users')
+                .then(res => res.json())
+                .then(data => {
+                    const filteredData = data.filter(user => {
+                        return user.cart.some(a => 
+                            a.cart_Item.some(b => {
+                                const itemDate = moment(b.tanggal_periksa).toDate(); 
+                                return itemDate >= startDate && itemDate <= endDate;
+                            })
+                        );
+                    });
+                    
+                    const pasienTableBody = document.querySelector('#pasienTableBody'); // Pastikan ini sudah ada di HTML
+                    pasienTableBody.innerHTML = filteredData.map(user => `
+                        <tr>
+                            <td>${user.nama}</td>
+                            <td>${user.phone}</td>
+                            <td>
+                                ${[...new Set(user.cart.filter(a => a.status === 'COMPLETED') 
+                                    .map(a => 
+                                        a.cart_Item.map(b => b.mcu.nama) 
+                                    ).flat())]  
+                                    .join(', ')}
+                            </td>
+                            <td>
+                                <a href="/admin/reports/">
+                                    <button class="btn btn-primary btn-sm">Detail</button>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+        };
+
+
     </script>
     
 </body>
