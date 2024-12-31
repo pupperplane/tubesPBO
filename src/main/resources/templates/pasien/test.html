@@ -96,7 +96,7 @@
                 <div class="summary">
                     <h5 class="summary-title">Ringkasan Pesanan</h5>
                     <p>Total Item: <span th:text="${mcu.size()}"></span></p>
-                    <p>Total Harga: <span th:text="'Rp ' + ${totalHarga}"></span></p>
+                    <p>Total Harga: <span th:text="${totalHarga}"></span></p>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@
                     <label for="dateInput" class="form-label">Tanggal Pemeriksaan:</label>
                     <input type="date" class="form-control" id="dateInput" name="date" required>
                 </div>
-                <button type="submit" class="btn btn-submit w-100">Submit</button>
+                <button type="submit" class="btn btn-submit w-100">Checkout</button>
             </form>
         </div>
     </div>

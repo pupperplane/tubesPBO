@@ -1,6 +1,9 @@
 package com.example.medicalcheckup.services;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,13 @@ public class MCUServices {
 
     public List<String> searchUser(String keyword) {
         return List.of("User1", "User2");
+    }
+    public List<String> formatMCUHarga(List<MCU> mcuList) {
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        
+        return mcuList.stream()
+                      .map(mcu -> formatRupiah.format(mcu.getHarga())) 
+                      .collect(Collectors.toList()); 
     }
     
 }
