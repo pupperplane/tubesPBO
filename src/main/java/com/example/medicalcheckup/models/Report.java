@@ -1,7 +1,9 @@
 package com.example.medicalcheckup.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,21 +15,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cart_item")
+@Table(name = "report")
 @Getter
 @Setter
-public class Cart_Item {
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JsonIgnoreProperties("Cart_Item")
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;  
+    @JoinColumn(name = "cart_id", nullable=false)
+    private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name = "mcu_id", nullable = false)
-    private MCU mcu;  
+    @Column(name = "Tanggal_CO", nullable = true)
+    private Date Tanggal_CO;
 
+    @Column(name = "Total_Bayar", nullable = true)
+    private double Total_Bayar;
 }

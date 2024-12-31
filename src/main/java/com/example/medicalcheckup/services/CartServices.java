@@ -22,7 +22,7 @@ public class CartServices {
 
     // Ambil semua keranjang
     public List<Cart> getAllKeranjang() {
-        return keranjangRepository.findAll();
+        return keranjangRepository.findAllByStatus(Status.COMPLETED);
     }
 
     // Ambil keranjang berdasarkan ID
