@@ -8,11 +8,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -33,9 +37,14 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "authorities")
-    private String authorities; // Contoh: "USER,ADMIN"
+    private String authorities; 
 
-    // Setter Methods
+    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Cart> Cart;
+
+
+    
     public void setId(int id) {
         this.id = id;
     }
@@ -60,13 +69,11 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
-    // Metode ini dihasilkan otomatis oleh Lombok @Getter dan @Setter
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(authorities.split(","))
                     .stream()
-                    .map(role -> "ROLE_" + role) // Menambahkan "ROLE_" sebagai prefix
+                    .map(role -> "ROLE_" + role)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
     }
@@ -92,6 +99,10 @@ public class User implements UserDetails {
 
     public String getPhone() {
         return phone;
+    }
+
+    public List <Cart> getCart() {
+        return this.Cart;
     }
 
     @Override
