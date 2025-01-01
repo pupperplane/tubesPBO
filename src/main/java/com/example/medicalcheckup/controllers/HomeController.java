@@ -36,6 +36,6 @@ public class HomeController {
         
         model.addAttribute("nama", user);  // Kirim nama ke view
         
-        return "home";  
+        return "pasien/home";  
     }
 }

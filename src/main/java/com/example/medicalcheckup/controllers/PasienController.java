@@ -60,7 +60,7 @@ public class PasienController {
             model.addAttribute("mcu", mcuList);
         }
 
-        return "pasien/index"; 
+        return "pasien/mcu"; 
     }
 
     @GetMapping("/home/cart")
@@ -85,7 +85,7 @@ public class PasienController {
         model.addAttribute("region", region);
         model.addAttribute("hospitals", hospitals);
         model.addAttribute("totalHarga", totalHarga);
-        return "pasien/test"; 
+        return "pasien/cart"; 
     }
 
     @PostMapping("/home/{id}")
@@ -147,7 +147,7 @@ public class PasienController {
         List <MCU> mcu =  cartItemService.getMCUByCartId(idC);
         model.addAttribute("mcu", mcu);
         model.addAttribute("cart", cart);
-        return "pasien/detail";
+        return "pasien/historyDetail";
     }
 
 }
