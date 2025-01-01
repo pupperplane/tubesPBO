@@ -31,7 +31,12 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .successHandler(customSuccessHandler())
                         .failureUrl("/login?error=true");
+                        
                 })
+                .exceptionHandling(ex -> {
+                    ex.accessDeniedPage("/access-denied"); 
+                })      
+                 
                 .logout(logout -> {
                     logout
                         .logoutUrl("/logout")             
@@ -44,7 +49,9 @@ public class SecurityConfig {
                     registry.requestMatchers("/admin/**").hasRole("ADMIN");
                     registry.anyRequest().authenticated(); 
                 })
-                .userDetailsService(customUserDetailsService) // Menyediakan custom userDetailsService
+                
+                .userDetailsService(customUserDetailsService) 
+                
                 .build();
     }
 
@@ -57,5 +64,5 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler customSuccessHandler() {
         return new CustomAuthenticationSuccessHandler();
     }
-
 }
+

@@ -1,9 +1,6 @@
 package com.example.medicalcheckup.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,10 +9,7 @@ import lombok.Setter;
 @Table(name="hospital")
 @Getter
 @Setter
-public class Hospital {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Hospital extends BaseEntity {
 
     private String name;
 

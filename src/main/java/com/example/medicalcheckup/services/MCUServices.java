@@ -30,6 +30,7 @@ public class MCUServices {
             existingMCU.setNama(updatedMCU.getNama());
             existingMCU.setCategory(updatedMCU.getCategory());
             existingMCU.setDetail(updatedMCU.getDetail());
+            existingMCU.setHarga(updatedMCU.getHarga());
             repository.save(existingMCU);
         }
     }

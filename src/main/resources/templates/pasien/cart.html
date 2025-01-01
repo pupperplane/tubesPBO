@@ -105,7 +105,7 @@
             <form th:action="@{/home/cart}" method="get">
                 <div class="form-group mb-3">
                     <label for="region" class="form-label">Pilih Daerah:</label>
-                    <select class="form-control" id="region" name="region" onchange="this.form.submit()">
+                    <select class="form-control" id="region" name="region" onchange="this.form.submit()" required>
                         <option value="" th:selected="${region == null}">Pilih Daerah</option>
                         <option value="Jakarta" th:selected="${region == 'Jakarta'}">Jakarta</option>
                         <option value="Surabaya" th:selected="${region == 'Surabaya'}">Surabaya</option>
@@ -118,7 +118,7 @@
                 <input type="hidden" name="region" th:value="${region}">
                 <div class="form-group mb-3">
                     <label for="hospital" class="form-label">Pilih Rumah Sakit:</label>
-                    <select class="form-control" id="hospital" name="hospital">
+                    <select class="form-control" id="hospital" name="hospital" required>
                         <option value="">Pilih Rumah Sakit</option>
                         <option th:each="hospital : ${hospitals}" th:value="${hospital.name}" th:text="${hospital.name}"></option>
                     </select>

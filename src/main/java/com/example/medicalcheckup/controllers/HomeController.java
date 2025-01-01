@@ -19,23 +19,31 @@ public class HomeController {
 
     @GetMapping("/")
     public String landingPage() {
-        return "index"; // Halaman landing
+        return "index"; 
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Halaman login
+        return "login";
     }
 
     @GetMapping("/home")
     public String home(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();  // Username yang digunakan untuk login
+        String username = authentication.getName(); 
     
-        User user = UserRepository.findByUsername(username);  // Cari user berdasarkan username
+        User user = UserRepository.findByUsername(username);  
         
-        model.addAttribute("nama", user);  // Kirim nama ke view
+        model.addAttribute("nama", user);  
         
         return "pasien/home";  
+    }
+
+    @GetMapping("/access-denied")
+    public String accesDenied(Model model) {
+        
+        model.addAttribute("error", "Maaf anda Bukan admin"); 
+        
+        return "exception/accesDenied";  
     }
 }

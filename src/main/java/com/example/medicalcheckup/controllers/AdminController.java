@@ -23,6 +23,8 @@ import com.example.medicalcheckup.services.CartItemServices;
 import com.example.medicalcheckup.services.CartServices;
 import com.example.medicalcheckup.services.MCUServices;
 
+import jakarta.persistence.EntityNotFoundException;
+
 
 
 
@@ -71,7 +73,7 @@ public class AdminController {
     public String addMCUPackage( @RequestParam String nama, 
                                 @RequestParam String kategori, 
                                 @RequestParam String detail, 
-                                @RequestParam int harga) {
+                                @RequestParam float harga) {
         MCU mcu = new MCU();
         mcu.setNama(nama);
         mcu.setCategory(kategori);
@@ -84,10 +86,10 @@ public class AdminController {
     //update paket
     @PutMapping("/admin/mcu/update/{id}")
     public String updateMCUPackage(@PathVariable int id,
-                                                    @RequestParam String nama, 
-                                                    @RequestParam String kategori, 
-                                                    @RequestParam String detail, 
-                                                    @RequestParam int harga) {
+                                    @RequestParam String nama, 
+                                    @RequestParam String kategori, 
+                                    @RequestParam String detail, 
+                                    @RequestParam float harga) {
         MCU mcu = new MCU();
         mcu.setNama(nama);
         mcu.setCategory(kategori);
@@ -120,6 +122,9 @@ public class AdminController {
     @GetMapping("/admin/reports/{id}")
     public String ReportDetail(@PathVariable int id, Model model) {
         Cart cart = cartServices.getKeranjangById(id);
+        if (cart == null) {
+            throw new EntityNotFoundException("Cart with id " + id + " not found.");
+        }
         List <MCU> mcu =  cartItemServices.getMCUByCartId(id);
         model.addAttribute("mcu", mcu);
         model.addAttribute("cart", cart);

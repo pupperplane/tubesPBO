@@ -26,6 +26,7 @@ import com.example.medicalcheckup.services.CartServices;
 import com.example.medicalcheckup.services.MCUServices;
 import com.example.medicalcheckup.services.UserService;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Controller
@@ -103,6 +104,7 @@ public class PasienController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         int userId = userService.getUserIdByUsername(username);
         Cart cart = cartService.getKeranjangByUserid(userId);
+        
         cartItemService.removeItemFromCart(cart,id);
         return "redirect:/home/cart"; 
     }
@@ -145,6 +147,9 @@ public class PasienController {
     public String viewDetail(Model model, @PathVariable int idC) {
         Cart cart = cartService.getKeranjangById(idC);
         List <MCU> mcu =  cartItemService.getMCUByCartId(idC);
+        if (cart == null) {
+            throw new EntityNotFoundException("Cart with id " + idC + " not found.");
+        }
         model.addAttribute("mcu", mcu);
         model.addAttribute("cart", cart);
         return "pasien/historyDetail";
