@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.medicalcheckup.models.Cart;
+import com.example.medicalcheckup.models.Cart.Status;
 import com.example.medicalcheckup.models.MCU;
 import com.example.medicalcheckup.models.User;
+import com.example.medicalcheckup.repositories.CartRepository;
 import com.example.medicalcheckup.repositories.UserRepository;
 import com.example.medicalcheckup.services.CartItemServices;
 import com.example.medicalcheckup.services.CartServices;
@@ -38,6 +40,9 @@ public class AdminController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @GetMapping("/admin")
     public String landingPage() {
@@ -118,7 +123,7 @@ public class AdminController {
         List <MCU> mcu =  cartItemServices.getMCUByCartId(id);
         model.addAttribute("mcu", mcu);
         model.addAttribute("cart", cart);
-        return "admin/detail";
+        return "admin/reportDetail";
     }
 
     @GetMapping("/admin/users")
@@ -126,6 +131,19 @@ public class AdminController {
         List <User> user = userRepository.findAllByAuthorities("USER");
 
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/admin/us/{id}")
+    public ResponseEntity<List<Cart>> detailis(@PathVariable int id, Model model) {
+        List <Cart> cart = cartRepository.findAllByUserIdAndStatus(id, Status.COMPLETED);
+
+        return ResponseEntity.ok(cart);
+    }
+    @GetMapping("/admin/users/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        List <Cart> cart = cartRepository.findAllByUserIdAndStatus(id, Status.COMPLETED);
+        model.addAttribute("cart", cart);
+        return "admin/userDetail";
     }
     
 

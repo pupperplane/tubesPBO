@@ -11,8 +11,11 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
+        <div class="container-fluid px-4">
             <a class="navbar-brand" href="#">Admin Dashboard</a>
+            <form class="nav-link" th:action="@{/logout}" method="post">
+                <button class="btn btn-dark" type="submit">Logout</button>
+            </form>
         </div>
     </nav>
 
@@ -36,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody id="mcuTableBody">
-                                <!-- Data dynamically loaded -->
+
                             </tbody>
                         </table>
                     </div>
@@ -60,7 +63,7 @@
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">
-                            <!-- Data dynamically loaded -->
+                   
                         </tbody>
                     </table>
                 </div>
@@ -84,7 +87,6 @@
                         </thead>
                         <tbody id="pasienTableBody">
 
-                            <!-- Data dynamically loaded -->
                         </tbody>
                     </table>
                 </div>
@@ -204,8 +206,6 @@
 
             const pasienTableBody = document.getElementById("pasienTableBody");
 
-            getUser();
-
             getMCU();
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left',
@@ -224,10 +224,10 @@
             }, function(start, end, label) {
                 filterDataPasien(start, end);
             });
-            const initialStart = moment().startOf('year');
-            const initialEnd = moment().endOf('year');
+            const initialStart = moment().set({ 'year': 2022, 'month': 3, 'date': 13 }); 
+            const initialEnd = moment();        
             filterDataLaporan(initialStart, initialEnd);
-            filterDataPasien(initialStart, initialEnd);
+            getUser();
         });
 
         function filterDataLaporan(start, end){
@@ -284,14 +284,26 @@
                             <td>${user.nama}</td>
                             <td>${user.phone}</td>
                             <td>
-                                ${[...new Set(user.cart.filter(a => a.status === 'COMPLETED') 
-                                    .map(a => 
-                                        a.cart_Item.map(b => b.mcu.nama) 
-                                    ).flat())]  
-                                    .join(', ')}
+                                ${[...new Set(
+                                    user.cart
+                                        .filter(a => a.status === 'COMPLETED')
+                                        .map(a => 
+                                            a.cart_Item.map(b => b.mcu.nama)
+                                        )
+                                        .flat()
+                                )].length > 0 
+                                    ? [...new Set(
+                                        user.cart
+                                            .filter(a => a.status === 'COMPLETED')
+                                            .map(a => 
+                                                a.cart_Item.map(b => b.mcu.nama)
+                                            )
+                                            .flat()
+                                    )].join(', ')
+                                : 'Tidak ada MCU yang dipilih'}
                             </td>
                             <td>
-                                <a href="/admin/reports/">
+                                <a href="/admin/users/${user.id}">
                                     <button class="btn btn-primary btn-sm">Detail</button>
                                 </a>
                             </td>
@@ -325,14 +337,26 @@
                             <td>${user.nama}</td>
                             <td>${user.phone}</td>
                             <td>
-                                ${[...new Set(user.cart.filter(a => a.status === 'COMPLETED') 
-                                    .map(a => 
-                                        a.cart_Item.map(b => b.mcu.nama) 
-                                    ).flat())]  
-                                    .join(', ')}
+                                ${[...new Set(
+                                    user.cart
+                                        .filter(a => a.status === 'COMPLETED')
+                                        .map(a => 
+                                            a.cart_Item.map(b => b.mcu.nama)
+                                        )
+                                        .flat()
+                                )].length > 0 
+                                    ? [...new Set(
+                                        user.cart
+                                            .filter(a => a.status === 'COMPLETED')
+                                            .map(a => 
+                                                a.cart_Item.map(b => b.mcu.nama)
+                                            )
+                                            .flat()
+                                    )].join(', ')
+                                : 'Tidak ada MCU yang dipilih'}
                             </td>
                             <td>
-                                <a href="/admin/reports/">
+                                <a href="/admin/users/${user.id}">
                                     <button class="btn btn-primary btn-sm">Detail</button>
                                 </a>
                             </td>
@@ -350,14 +374,26 @@
                             <td>${user.nama}</td>
                             <td>${user.phone}</td>
                             <td>
-                                ${[...new Set(user.cart.filter(a => a.status === 'COMPLETED') 
-                                    .map(a => 
-                                        a.cart_Item.map(b => b.mcu.nama) 
-                                    ).flat())]  
-                                    .join(', ')}
+                               ${[...new Set(
+                                    user.cart
+                                        .filter(a => a.status === 'COMPLETED')
+                                        .map(a => 
+                                            a.cart_Item.map(b => b.mcu.nama)
+                                        )
+                                        .flat()
+                                )].length > 0 
+                                    ? [...new Set(
+                                        user.cart
+                                            .filter(a => a.status === 'COMPLETED')
+                                            .map(a => 
+                                                a.cart_Item.map(b => b.mcu.nama)
+                                            )
+                                            .flat()
+                                    )].join(', ')
+                                : 'Tidak ada MCU yang dipilih'}
                             </td>
                             <td>
-                                <a href="/admin/reports/">
+                                <a href="/admin/users/${user.id}">
                                     <button class="btn btn-primary btn-sm">Detail</button>
                                 </a>
                             </td>
