@@ -46,7 +46,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String landingPage() {
-        return "admin/homeAdmin"; // Halaman landing
+        return "admin/homeAdmin"; 
     }
 
     //ngambil semua paket
@@ -133,12 +133,6 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/admin/us/{id}")
-    public ResponseEntity<List<Cart>> detailis(@PathVariable int id, Model model) {
-        List <Cart> cart = cartRepository.findAllByUserIdAndStatus(id, Status.COMPLETED);
-
-        return ResponseEntity.ok(cart);
-    }
     @GetMapping("/admin/users/{id}")
     public String detail(@PathVariable int id, Model model) {
         List <Cart> cart = cartRepository.findAllByUserIdAndStatus(id, Status.COMPLETED);
@@ -146,5 +140,4 @@ public class AdminController {
         return "admin/userDetail";
     }
     
-
 }
