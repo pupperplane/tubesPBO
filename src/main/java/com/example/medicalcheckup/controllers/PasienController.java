@@ -85,7 +85,7 @@ public class PasienController {
         model.addAttribute("region", region);
         model.addAttribute("hospitals", hospitals);
         model.addAttribute("totalHarga", totalHarga);
-        return "pasien/test"; 
+        return "pasien/cart"; 
     }
 
     @PostMapping("/home/{id}")
